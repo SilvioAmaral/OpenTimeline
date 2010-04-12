@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2008                    */
-/* Created on:     12-Apr-10 7:50:44 PM                         */
+/* Created on:     12-Apr-10 7:54:20 PM                         */
 /*==============================================================*/
 
 
@@ -171,7 +171,7 @@ go
 /*==============================================================*/
 create table MEMBER (
    ID                   int                  identity,
-   USERID               int                  not null,
+   ACCOUNTID            int                  not null,
    TIMELINEID           int                  not null,
    ISADMIN              bit                  not null,
    VERSION              int                  not null,
@@ -184,7 +184,7 @@ go
 /*==============================================================*/
 create index INDEX_1 on MEMBER (
 ID ASC,
-USERID ASC,
+ACCOUNTID ASC,
 TIMELINEID ASC
 )
 go
@@ -240,7 +240,7 @@ alter table EVENT
 go
 
 alter table MEMBER
-   add constraint FK_MEMBER_REFERENCE_ACCOUNT foreign key (USERID)
+   add constraint FK_MEMBER_REFERENCE_ACCOUNT foreign key (ACCOUNTID)
       references ACCOUNT (ID)
 go
 
