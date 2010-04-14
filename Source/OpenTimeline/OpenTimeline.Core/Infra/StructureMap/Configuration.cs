@@ -2,6 +2,7 @@ using System.Web.Mvc;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
+using OpenTimeline.Core.AutoMapping;
 using OpenTimeline.Core.Domain;
 using OpenTimeline.Core.Repositories;
 using StructureMap;
@@ -21,13 +22,25 @@ namespace OpenTimeline.Core.Infra.StructureMap
                                              x.For<ISession>()
                                                  .HttpContextScoped()
                                                  .Use(context => context.GetInstance<ISessionFactory>().OpenSession());
+
+                                             x.For<IModelMapper>()
+                                                 .Use<AutoMapperModelMapper>();
+
                                              x.For<IRepository<Timeline>>()
                                                  .Use<Repository<Timeline>>();
 
-                                             x.Scan(y =>
+                                             //x.Scan(cfg =>
+                                             //           {
+                                             //               cfg.TheCallingAssembly();
+                                             //               cfg.IncludeNamespaceContainingType<Timeline>();
+                                             //               cfg.ConnectImplementationsToTypesClosing(
+                                             //                   typeof (IRepository<>));
+                                             //           });
+
+                                             x.Scan(cfg =>
                                                         {
-                                                            y.Assembly("OpenTimeline.Web");
-                                                            y.AddAllTypesOf<IController>();
+                                                            cfg.Assembly("OpenTimeline.Web");
+                                                            cfg.AddAllTypesOf<IController>();
                                                         });
 
                                          });

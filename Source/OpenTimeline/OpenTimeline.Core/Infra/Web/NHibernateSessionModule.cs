@@ -2,32 +2,40 @@ using System;
 using System.Web;
 using NHibernate;
 using NHibernate.Context;
+using OpenTimeline.Core.InversionOfControl;
 using OpenTimeline.Core.Lib;
-using StructureMap;
 
 namespace OpenTimeline.Core.Infra.Web
 {
     public class NHibernateSessionModule : IHttpModule
     {
+        #region IHttpModule Members
+
         public void Init(HttpApplication context)
         {
             context.BeginRequest += BeginRequest;
             context.EndRequest += EndRequest;
         }
 
+        public void Dispose()
+        {
+        }
+
+        #endregion
+
         private static void BeginRequest(object sender, EventArgs e)
         {
-            var session = ObjectFactory.GetInstance<ISession>();
+            var session = IoC.Resolve<ISession>();
             session.BeginTransaction();
             CurrentSessionContext.Bind(session);
         }
 
         private static void EndRequest(object sender, EventArgs e)
         {
-            var session = CurrentSessionContext.Unbind(ObjectFactory.GetInstance<ISessionFactory>());
+            ISession session = CurrentSessionContext.Unbind(IoC.Resolve<ISessionFactory>());
 
             if (session.IsNull()) return;
-            
+
             try
             {
                 session.Transaction.Commit();
@@ -41,10 +49,6 @@ namespace OpenTimeline.Core.Infra.Web
                 session.Close();
                 session.Dispose();
             }
-        }
-
-        public void Dispose()
-        {
         }
     }
 }

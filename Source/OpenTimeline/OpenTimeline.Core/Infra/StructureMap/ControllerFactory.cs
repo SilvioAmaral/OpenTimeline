@@ -9,7 +9,7 @@ namespace OpenTimeline.Core.Infra.StructureMap
     {
         public override IController CreateController(RequestContext requestContext, string controllerName)
         {
-            var controllerType = base.GetControllerType(requestContext, controllerName);
+            Type controllerType = base.GetControllerType(requestContext, controllerName);
             return ObjectFactory.GetInstance(controllerType) as IController;
         }
     }

@@ -34,6 +34,9 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>C:\Dev\Libs\FluentNHibernate\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="AutoMapper">
+      <HintPath>C:\Dev\Libs\AutoMapper\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core">
       <HintPath>C:\Dev\Libs\FluentNHibernate\Castle.Core.dll</HintPath>
     </Reference>
@@ -69,6 +72,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoMapping\AutoMapperModelMapper.cs" />
+    <Compile Include="AutoMapping\IModelMapper.cs" />
     <Compile Include="Domain\Account.cs" />
     <Compile Include="Domain\Event.cs" />
     <Compile Include="Domain\Member.cs" />
@@ -77,6 +82,10 @@
     <Compile Include="Infra\StructureMap\Configuration.cs" />
     <Compile Include="Infra\StructureMap\ControllerFactory.cs" />
     <Compile Include="Infra\Web\NHibernateSessionModule.cs" />
+    <Compile Include="InversionOfControl\IDependencyResolver.cs" />
+    <Compile Include="InversionOfControl\IoC.cs" />
+    <Compile Include="InversionOfControl\StructureMapDependecyResolver.cs" />
+    <Compile Include="Lib\EnumerableExtensions.cs" />
     <Compile Include="Lib\ObjectExtensions.cs" />
     <Compile Include="NHibernate\Mapping\AccountMap.cs" />
     <Compile Include="NHibernate\Mapping\EventMap.cs" />

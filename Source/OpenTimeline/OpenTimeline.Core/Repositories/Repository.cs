@@ -12,9 +12,18 @@ namespace OpenTimeline.Core.Repositories
             _session = session;
         }
 
+        #region IRepository<T> Members
+
         public IEnumerable<T> FindAll()
         {
-            return _session.CreateCriteria(typeof(T)).List<T>();
+            return _session.CreateCriteria(typeof (T)).List<T>();
         }
+
+        public T FindById(int id)
+        {
+            return _session.Load<T>(id);
+        }
+
+        #endregion
     }
 }
