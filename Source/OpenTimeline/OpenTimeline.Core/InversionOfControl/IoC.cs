@@ -1,3 +1,5 @@
+using System;
+
 namespace OpenTimeline.Core.InversionOfControl
 {
     public class IoC
@@ -12,6 +14,11 @@ namespace OpenTimeline.Core.InversionOfControl
         public static T Resolve<T>()
         {
             return _resolver.Resolve<T>();
+        }
+
+        public static object Resolve(Type type)
+        {
+            return _resolver.Resolve(type);
         }
     }
 }
