@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NHibernate;
+using NHibernate.Linq;
 
 namespace OpenTimeline.Core.Repositories
 {
@@ -16,7 +17,8 @@ namespace OpenTimeline.Core.Repositories
 
         public IEnumerable<T> FindAll()
         {
-            return _session.CreateCriteria(typeof (T)).List<T>();
+            return _session.Linq<T>();
+            //return _session.CreateCriteria(typeof (T)).List<T>();
         }
 
         public T FindById(int id)
