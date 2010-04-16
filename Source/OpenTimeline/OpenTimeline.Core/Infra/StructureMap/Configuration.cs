@@ -29,6 +29,8 @@ namespace OpenTimeline.Core.Infra.StructureMap
                                              x.For<IRepository<Timeline>>()
                                                  .Use<Repository<Timeline>>();
 
+                                             x.For<IRepository<Member>>()
+                                                 .Use<Repository<Member>>();
                                              //x.Scan(cfg =>
                                              //           {
                                              //               cfg.TheCallingAssembly();
@@ -42,7 +44,6 @@ namespace OpenTimeline.Core.Infra.StructureMap
                                                             cfg.Assembly("OpenTimeline.Web");
                                                             cfg.AddAllTypesOf<IController>();
                                                         });
-
                                          });
         }
 

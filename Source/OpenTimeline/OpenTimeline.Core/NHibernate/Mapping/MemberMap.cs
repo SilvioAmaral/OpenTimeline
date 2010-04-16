@@ -1,8 +1,9 @@
 using FluentNHibernate.Mapping;
+using OpenTimeline.Core.Domain;
 
 namespace OpenTimeline.Core.NHibernate.Mapping
 {
-    public class MemberMap : ClassMap<Domain.Member>
+    public class MemberMap : ClassMap<Member>
     {
         public MemberMap()
         {

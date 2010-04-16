@@ -1,8 +1,9 @@
 using FluentNHibernate.Mapping;
+using OpenTimeline.Core.Domain;
 
 namespace OpenTimeline.Core.NHibernate.Mapping
 {
-    public class EventMap : ClassMap<Domain.Event>
+    public class EventMap : ClassMap<Event>
     {
         public EventMap()
         {
@@ -13,6 +14,5 @@ namespace OpenTimeline.Core.NHibernate.Mapping
             Map(x => x.Version);
             HasMany(x => x.MemberEvents).KeyColumns.Add("EventId").AsSet().Inverse().Cascade.All();
         }
-
     }
 }

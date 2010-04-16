@@ -1,7 +1,7 @@
 using System;
 using System.Web.Mvc;
 using System.Web.Routing;
-using StructureMap;
+using OpenTimeline.Core.InversionOfControl;
 
 namespace OpenTimeline.Core.Infra.StructureMap
 {
@@ -10,7 +10,7 @@ namespace OpenTimeline.Core.Infra.StructureMap
         public override IController CreateController(RequestContext requestContext, string controllerName)
         {
             Type controllerType = base.GetControllerType(requestContext, controllerName);
-            return ObjectFactory.GetInstance(controllerType) as IController;
+            return IoC.Resolve(controllerType) as IController;
         }
     }
 }

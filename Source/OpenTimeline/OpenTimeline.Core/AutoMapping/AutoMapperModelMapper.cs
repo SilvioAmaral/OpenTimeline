@@ -16,11 +16,9 @@ namespace OpenTimeline.Core.AutoMapping
 
         public IEnumerable<TResult> MapAll<TSource, TResult>(IEnumerable<TSource> sourceEnumerable)
         {
-            if (sourceEnumerable.IsNullOrEmpty())
-            {
-                return Enumerable.Empty<TResult>();
-            }
-            return sourceEnumerable.Select(Mapper.Map<TSource, TResult>);
+            return sourceEnumerable.IsNullOrEmpty()
+                       ? Enumerable.Empty<TResult>()
+                       : sourceEnumerable.Select(Mapper.Map<TSource, TResult>);
         }
 
         #endregion

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using OpenTimeline.Core.Infra.StructureMap;
+using OpenTimeline.Core.InversionOfControl;
 
 namespace OpenTimeline.Web
 {
@@ -31,6 +32,7 @@ namespace OpenTimeline.Web
 
             RegisterRoutes(RouteTable.Routes);
             OpenTimeline.Core.Infra.StructureMap.Configuration.Configure();
+            IoC.Initialize(new StructureMapDependecyResolver());
             ControllerBuilder.Current.SetControllerFactory(new ControllerFactory());
         }
     }
