@@ -10,6 +10,8 @@ namespace OpenTimeline.Core.Infra.StructureMap
         public override IController CreateController(RequestContext requestContext, string controllerName)
         {
             Type controllerType = base.GetControllerType(requestContext, controllerName);
+            if (controllerType == null)
+                return null;
             return IoC.Resolve(controllerType) as IController;
         }
     }
