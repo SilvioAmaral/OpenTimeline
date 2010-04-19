@@ -1,204 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Security.Principal;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
-using System.Web.Routing;
-using System.Web.Security;
-using OpenTimeline.Web.Models;
+using OpenTimeline.Core.Domain;
+using OpenTimeline.Core.Repositories;
+using OpenTimeline.Core.ViewModel;
 
 namespace OpenTimeline.Web.Controllers
 {
-
-    [HandleError]
     public class AccountController : Controller
     {
+        private readonly IRepository<Account> _accountRepository;
+        private readonly ITimelineRepository _timelineRepository;
 
-        // This constructor is used by the MVC framework to instantiate the controller using
-        // the default forms authentication and membership providers.
-        public AccountController()
-            : this(null, null)
+        public AccountController(IRepository<Account> accountRepository, ITimelineRepository timelineRepository)
         {
+            _accountRepository = accountRepository;
+            _timelineRepository = timelineRepository;
         }
 
-        // This constructor is not used by the MVC framework but is instead provided for ease
-        // of unit testing this type. See the comments in AccountModels.cs for more information.
-        public AccountController(IFormsAuthenticationService formsService, IMembershipService membershipService)
-        {
-            FormsService = formsService ?? new FormsAuthenticationService();
-            MembershipService = membershipService ?? new AccountMembershipService();
-        }
+        //
+        // GET: /Account/
 
-        public IFormsAuthenticationService FormsService
-        {
-            get;
-            private set;
-        }
-
-        public IMembershipService MembershipService
-        {
-            get;
-            private set;
-        }
-
-        protected override void Initialize(RequestContext requestContext)
-        {
-            if (requestContext.HttpContext.User.Identity is WindowsIdentity)
-            {
-                throw new InvalidOperationException("Windows authentication is not supported.");
-            }
-            else
-            {
-                base.Initialize(requestContext);
-            }
-        }
-
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
-
-            base.OnActionExecuting(filterContext);
-        }
-
-        [Authorize]
-        public ActionResult ChangePassword()
+        public ActionResult Index()
         {
             return View();
         }
 
-        [Authorize]
-        [HttpPost]
-        public ActionResult ChangePassword(ChangePasswordModel model)
+        public ActionResult MyTimeline(int timelineId, int accountId)
         {
-            if (ModelState.IsValid)
+            var viewModel = new MemberTimelineViewModel();
+            var timelines = _timelineRepository.FindByAccount(accountId);
+
+            foreach (var timeline in timelines)
             {
-                if (MembershipService.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword))
-                {
-                    return RedirectToAction("ChangePasswordSuccess");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
-                }
+                viewModel.Timelines.Add(new SelectListItem()
+                                            {
+                                                Text = timeline.Name,
+                                                Value = timeline.Id.ToString()
+                                            });
             }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
+            Account account = _accountRepository.FindById(accountId);
 
-        public ActionResult ChangePasswordSuccess()
-        {
-            return View();
-        }
-
-        public ActionResult LogOff()
-        {
-            FormsService.SignOut();
-
-            return RedirectToAction("Index", "Home");
-        }
-
-        public ActionResult LogOn()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings",
-            Justification = "Needs to take same parameter type as Controller.Redirect()")]
-        public ActionResult LogOn(LogOnModel model, string returnUrl)
-        {
-            if (ModelState.IsValid)
+            Member m = account.Members.FirstOrDefault(x => x.Timeline.Id.Value == timelineId);
+            viewModel.TimelineName = m.Timeline.Name;
+            foreach (var memberEvent in m.MemberEvents)
             {
-                if (MembershipService.ValidateUser(model.UserName, model.Password))
-                {
-                    FormsService.SignIn(model.UserName, model.RememberMe);
-                    if (!String.IsNullOrEmpty(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
-                }
+                viewModel.Events.Add(new MemberTimelineViewModel.EventViewModel
+                                         {
+                                             EventName = memberEvent.Event.Name,
+                                             Date = memberEvent.Date
+                                         });
             }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            return View(viewModel);
         }
-
-        public ActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Register(RegisterModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // Attempt to register the user
-                MembershipCreateStatus createStatus = MembershipService.CreateUser(model.UserName, model.Password, model.Email);
-
-                if (createStatus == MembershipCreateStatus.Success)
-                {
-                    FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError("", ErrorCodeToString(createStatus));
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-        private static string ErrorCodeToString(MembershipCreateStatus createStatus)
-        {
-            // See http://go.microsoft.com/fwlink/?LinkID=177550 for
-            // a full list of status codes.
-            switch (createStatus)
-            {
-                case MembershipCreateStatus.DuplicateUserName:
-                    return "Username already exists. Please enter a different user name.";
-
-                case MembershipCreateStatus.DuplicateEmail:
-                    return "A username for that e-mail address already exists. Please enter a different e-mail address.";
-
-                case MembershipCreateStatus.InvalidPassword:
-                    return "The password provided is invalid. Please enter a valid password value.";
-
-                case MembershipCreateStatus.InvalidEmail:
-                    return "The e-mail address provided is invalid. Please check the value and try again.";
-
-                case MembershipCreateStatus.InvalidAnswer:
-                    return "The password retrieval answer provided is invalid. Please check the value and try again.";
-
-                case MembershipCreateStatus.InvalidQuestion:
-                    return "The password retrieval question provided is invalid. Please check the value and try again.";
-
-                case MembershipCreateStatus.InvalidUserName:
-                    return "The user name provided is invalid. Please check the value and try again.";
-
-                case MembershipCreateStatus.ProviderError:
-                    return "The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
-
-                case MembershipCreateStatus.UserRejected:
-                    return "The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
-
-                default:
-                    return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
-            }
-        }
-
     }
 }

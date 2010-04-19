@@ -17,7 +17,11 @@ namespace OpenTimeline.Web
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+            routes.MapRoute(
+                "MyTimeline",
+                "{controller}/{action}/{timelineId}/{accountId}",
+                new { controller = "Account", action = "MyTimeline", timelineId = "", accountId = "" }
+                );
             routes.MapRoute(
                 "Default",                                              // Route name
                 "{controller}/{action}/{id}",                           // URL with parameters

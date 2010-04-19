@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NHibernate;
 using NHibernate.Linq;
 
@@ -6,7 +8,7 @@ namespace OpenTimeline.Core.Repositories
 {
     public class Repository<T> : IRepository<T>
     {
-        private readonly ISession _session;
+        protected readonly ISession _session;
 
         public Repository(ISession session)
         {
@@ -14,6 +16,11 @@ namespace OpenTimeline.Core.Repositories
         }
 
         #region IRepository<T> Members
+
+        public IQueryable<T> Query(Func<IQueryable<T>,IQueryable<T>> filter)
+        {
+            return filter.Invoke(_session.Linq<T>());
+        }
 
         public IEnumerable<T> FindAll()
         {

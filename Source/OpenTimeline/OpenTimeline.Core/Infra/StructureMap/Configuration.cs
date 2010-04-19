@@ -31,6 +31,13 @@ namespace OpenTimeline.Core.Infra.StructureMap
 
                                              x.For<IRepository<Member>>()
                                                  .Use<Repository<Member>>();
+
+                                             x.For<IRepository<Account>>()
+                                                 .Use<Repository<Account>>();
+
+                                             x.For<ITimelineRepository>()
+                                                 .Use<TimelineRepository>();
+
                                              //x.Scan(cfg =>
                                              //           {
                                              //               cfg.TheCallingAssembly();

@@ -91,6 +91,7 @@
     <Compile Include="Domain\Member.cs" />
     <Compile Include="Domain\MemberEvent.cs" />
     <Compile Include="Domain\Timeline.cs" />
+    <Compile Include="Infra\AutoMapper\AutoMapperConfiguration.cs" />
     <Compile Include="Infra\StructureMap\Configuration.cs" />
     <Compile Include="Infra\StructureMap\ControllerFactory.cs" />
     <Compile Include="Infra\Web\NHibernateSessionModule.cs" />
@@ -106,8 +107,11 @@
     <Compile Include="NHibernate\Mapping\TimelineMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\ITimelineRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
+    <Compile Include="Repositories\TimelineRepository.cs" />
     <Compile Include="ViewModel\EventViewModel.cs" />
+    <Compile Include="ViewModel\MemberTimelineViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Container\" />
