@@ -3,7 +3,7 @@ using AutoMapper;
 using OpenTimeline.Core.Domain;
 using OpenTimeline.Core.ViewModel;
 
-namespace OpenTimeline.Core.Configuration
+namespace OpenTimeline.Core.Config
 {
     public class AutoMapperStartupTask : IStartupTask
     {

@@ -2,7 +2,7 @@
 using OpenTimeline.Core.Repositories;
 using StructureMap;
 
-namespace OpenTimeline.Core.Configuration
+namespace OpenTimeline.Core.Config
 {
     public class RepositoryRegistrationTask : IContainerRegistrationTask
     {
@@ -14,6 +14,7 @@ namespace OpenTimeline.Core.Configuration
                                         {
                                             x.For<IRepository<Timeline>>().Use<Repository<Timeline>>();
                                             x.For<IRepository<Member>>().Use<Repository<Member>>();
+                                            x.For<IRepository<Event>>().Use<Repository<Event>>();
                                             x.For<IRepository<Account>>().Use<Repository<Account>>();
                                             x.For<ITimelineRepository>().Use<TimelineRepository>();
                                         });

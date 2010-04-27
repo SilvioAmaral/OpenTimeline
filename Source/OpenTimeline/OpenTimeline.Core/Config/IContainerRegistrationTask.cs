@@ -1,6 +1,4 @@
-using System;
-
-namespace OpenTimeline.Core.Configuration
+namespace OpenTimeline.Core.Config
 {
     public interface IContainerRegistrationTask
     {

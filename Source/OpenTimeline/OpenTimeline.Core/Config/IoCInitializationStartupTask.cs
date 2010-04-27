@@ -1,6 +1,6 @@
 ﻿using OpenTimeline.Core.InversionOfControl;
 
-namespace OpenTimeline.Core.Configuration
+namespace OpenTimeline.Core.Config
 {
     public class IoCInitializationStartupTask : IStartupTask
     {

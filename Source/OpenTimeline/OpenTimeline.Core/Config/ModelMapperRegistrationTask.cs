@@ -1,7 +1,7 @@
 ﻿using OpenTimeline.Core.AutoMapping;
 using StructureMap;
 
-namespace OpenTimeline.Core.Configuration
+namespace OpenTimeline.Core.Config
 {
     public class ModelMapperRegistrationTask : IContainerRegistrationTask
     {

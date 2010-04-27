@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using OpenTimeline.Core.Lib;
 using StructureMap;
 
-namespace OpenTimeline.Core.Configuration
+namespace OpenTimeline.Core.Config
 {
     public class StructureMapApplicationBootstrapper
     {

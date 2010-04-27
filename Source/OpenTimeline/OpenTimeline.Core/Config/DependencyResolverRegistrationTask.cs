@@ -1,7 +1,7 @@
 ﻿using OpenTimeline.Core.InversionOfControl;
 using StructureMap;
 
-namespace OpenTimeline.Core.Configuration
+namespace OpenTimeline.Core.Config
 {
     public class DependencyResolverRegistrationTask : IContainerRegistrationTask
     {
