@@ -17,7 +17,7 @@ namespace OpenTimeline.Core.Repositories
 
         public IEnumerable<Timeline> FindByAccount(int accountId)
         {
-            var members = (from x in _session.Linq<Member>()
+            var members = (from x in Session.Linq<Member>()
                                                      where x.Account.Id == accountId
                                                      select x).ToList();
             var timelines = members.Select(x => x.Timeline);

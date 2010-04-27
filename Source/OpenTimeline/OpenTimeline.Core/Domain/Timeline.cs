@@ -19,6 +19,12 @@ namespace OpenTimeline.Core.Domain
 
         public virtual ISet<Member> Members { get; set; }
 
+        public Timeline()
+        {
+            Events = new HashedSet<Event>();
+            Members = new HashedSet<Member>();
+        }
+
         public virtual Member AddMember(Member member)
         {
             member.Timeline = this;

@@ -7,5 +7,7 @@ namespace OpenTimeline.Core.Repositories
     {
         IEnumerable<T> FindAll();
         T FindById(int id);
+        void Save(T entity);
+        void Delete(T entity);
     }
 }

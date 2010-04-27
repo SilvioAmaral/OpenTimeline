@@ -8,29 +8,39 @@ namespace OpenTimeline.Core.Repositories
 {
     public class Repository<T> : IRepository<T>
     {
-        protected readonly ISession _session;
+        protected readonly ISession Session;
 
         public Repository(ISession session)
         {
-            _session = session;
+            Session = session;
         }
 
         #region IRepository<T> Members
 
         public IQueryable<T> Query(Func<IQueryable<T>,IQueryable<T>> filter)
         {
-            return filter.Invoke(_session.Linq<T>());
+            return filter.Invoke(Session.Linq<T>());
         }
 
         public IEnumerable<T> FindAll()
         {
-            return _session.Linq<T>();
+            return Session.Linq<T>();
             //return _session.CreateCriteria(typeof (T)).List<T>();
         }
 
         public T FindById(int id)
         {
-            return _session.Load<T>(id);
+            return Session.Load<T>(id);
+        }
+
+        public void Save(T entity)
+        {
+            Session.SaveOrUpdate(entity);
+        }
+
+        public void Delete(T entity)
+        {
+            Session.Delete(entity);
         }
 
         #endregion

@@ -12,6 +12,7 @@ namespace OpenTimeline.Core.NHibernate.Mapping
             Map(x => x.Name).Not.Nullable();
             Map(x => x.Description);
             Map(x => x.Version);
+            References(x => x.Timeline, "TimelineId").Fetch.Join();
             HasMany(x => x.MemberEvents).KeyColumns.Add("EventId").AsSet().Inverse().Cascade.All();
         }
     }

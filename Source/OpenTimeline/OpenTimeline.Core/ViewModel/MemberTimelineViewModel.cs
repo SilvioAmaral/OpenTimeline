@@ -6,10 +6,10 @@ namespace OpenTimeline.Core.ViewModel
 {
     public class MemberTimelineViewModel
     {
-        public IList<SelectListItem> Timelines { get; set; }
+        public IEnumerable<SelectListItem> Timelines { get; set; }
         public int TimelineId { get; set; }
         public string TimelineName { get; set; }
-        public IList<MemberTimelineViewModel.EventViewModel> Events { get; set; }
+        public IEnumerable<MemberTimelineViewModel.EventViewModel> Events { get; set; }
 
         public MemberTimelineViewModel()
         {
